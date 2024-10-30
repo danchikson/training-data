@@ -3,27 +3,26 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.shortFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Клас BasicDataOperationUsingSet надає методи для виконання основних операцiй з даними типу LocalDateTime.
+ * Клас BasicDataOperationUsingSet надає методи для виконання основних операцiй з даними типу Short.
  * 
- * <p>Цей клас зчитує данi з файлу "list/LocalDateTime.data", сортує їх та виконує пошук значення в масивi та множинi.</p>
+ * <p>Цей клас зчитує данi з файлу "list/Short.data", сортує їх та виконує пошук значення в масивi та множинi.</p>
  * 
  * <p>Основнi методи:</p>
  * <ul>
  *   <li>{@link #main(String[])} - Точка входу в програму.</li>
  *   <li>{@link #doDataOperation()} - Виконує основнi операцiї з даними.</li>
- *   <li>{@link #sortArray()} - Сортує масив LocalDateTime.</li>
- *   <li>{@link #searchArray()} - Виконує пошук значення в масивi LocalDateTime.</li>
- *   <li>{@link #findMinAndMaxInArray()} - Знаходить мiнiмальне та максимальне значення в масивi LocalDateTime.</li>
- *   <li>{@link #searchSet()} - Виконує пошук значення в множинi LocalDateTime.</li>
- *   <li>{@link #findMinAndMaxInSet()} - Знаходить мiнiмальне та максимальне значення в множинi LocalDateTime.</li>
+ *   <li>{@link #sortArray()} - Сортує масив Short.</li>
+ *   <li>{@link #searchArray()} - Виконує пошук значення в масивi Short.</li>
+ *   <li>{@link #findMinAndMaxInArray()} - Знаходить мiнiмальне та максимальне значення в масивi Short.</li>
+ *   <li>{@link #searchSet()} - Виконує пошук значення в множинi Short.</li>
+ *   <li>{@link #findMinAndMaxInSet()} - Знаходить мiнiмальне та максимальне значення в множинi Short.</li>
  *   <li>{@link #compareArrayAndSet()} - Порiвнює елементи масиву та множини.</li>
  * </ul>
  * 
@@ -39,9 +38,9 @@ import java.util.Set;
  * 
  * <p>Змiннi екземпляра:</p>
  * <ul>
- *   <li>{@link #dataTimeValueToSearch} - Значення LocalDateTime для пошуку.</li>
- *   <li>{@link #dataTimeArray} - Масив LocalDateTime.</li>
- *   <li>{@link #dataTimeSet} - Множина LocalDateTime.</li>
+ *   <li>{@link #shortValueToSearch} - Значення Short для пошуку.</li>
+ *   <li>{@link #shortArray} - Масив Short.</li>
+ *   <li>{@link #shortSet} - Множина Short.</li>
  * </ul>
  * 
  * <p>Приклад використання:</p>
@@ -52,11 +51,11 @@ import java.util.Set;
  * </pre>
  */
 public class BasicDataOperationUsingSet {
-    static final String PATH_TO_DATA_FILE = "list/LocalDateTime.data";
+    static final String PATH_TO_DATA_FILE = "list/short.data";
 
-    LocalDateTime dataTimeValueToSearch;
-    LocalDateTime[] dataTimeArray;
-    Set<LocalDateTime> dataTimeSet = new HashSet<>();
+    Short shortValueToSearch;
+    short[] shortArray;
+    Set<Short> shortSet = new HashSet<>();
 
     public static void main(String[] args) {  
         BasicDataOperationUsingSet basicDataOperationUsingSet = new BasicDataOperationUsingSet(args);
@@ -74,16 +73,16 @@ public class BasicDataOperationUsingSet {
         }
 
         String valueToSearch = args[0];
-        this.dataTimeValueToSearch = LocalDateTime.parse(valueToSearch, DateTimeFormatter.ISO_DATE_TIME);
+        this.shortValueToSearch = Short.parseShort(line);
 
-        dataTimeArray = Utils.readArrayFromFile(PATH_TO_DATA_FILE);
-        dataTimeSet = new HashSet<>(Arrays.asList(dataTimeArray));
+        shortArray = Utils.readArrayFromFile(PATH_TO_DATA_FILE);
+        shortSet = new HashSet<>(Arrays.asList(shortArray));
     }
 
     /**
      * Виконує основнi операцiї з даними.
      * 
-     * Метод зчитує масив та множину об'єктiв LocalDateTime з файлу, сортує їх та виконує пошук значення.
+     * Метод зчитує масив та множину об'єктiв Short з файлу, сортує їх та виконує пошук значення.
      */
     private void doDataOperation() {
         // операцiї з масивом дати та часу
@@ -101,17 +100,17 @@ public class BasicDataOperationUsingSet {
         compareArrayAndSet();
 
         // записати вiдсортований масив в окремий файл
-        Utils.writeArrayToFile(dataTimeArray, PATH_TO_DATA_FILE + ".sorted");
+        Utils.writeArrayToFile(shortArray, PATH_TO_DATA_FILE + ".sorted");
     }
 
     /**
-     * Сортує масив об'єктiв LocalDateTime та виводить початковий i вiдсортований масиви.
+     * Сортує масив об'єктiв Short та виводить початковий i вiдсортований масиви.
      * Вимiрює та виводить час, витрачений на сортування масиву в наносекундах.
      */
     private void sortArray() {
         long startTime = System.nanoTime();
 
-        Arrays.sort(dataTimeArray);
+        Arrays.sort(shortArray);
 
         Utils.printOperationDuration(startTime, "сортування масиву дати i часу");
     }
@@ -122,39 +121,39 @@ public class BasicDataOperationUsingSet {
     private void searchArray() {
         long startTime = System.nanoTime();
 
-        int index = Arrays.binarySearch(this.dataTimeArray, dataTimeValueToSearch);
+        int index = Arrays.binarySearch(this.shortArray, shortValueToSearch);
 
         Utils.printOperationDuration(startTime, "пошук в масивi дати i часу");
 
         if (index >= 0) {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' знайдено в масивi за iндексом: " + index);
+            System.out.println("Значення '" + shortValueToSearch + "' знайдено в масивi за iндексом: " + index);
         } else {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' в масивi не знайдено.");
+            System.out.println("Значення '" + shortValueToSearch + "' в масивi не знайдено.");
         }
     }
 
     /**
-     * Знаходить мiнiмальне та максимальне значення в масивi LocalDateTime.
+     * Знаходить мiнiмальне та максимальне значення в масивi Short.
      */
     private void findMinAndMaxInArray() {
-        if (dataTimeArray == null || dataTimeArray.length == 0) {
+        if (shortArray == null || shortArray.length == 0) {
             System.out.println("Масив порожнiй або не iнiцiалiзований.");
             return;
         }
 
         long startTime = System.nanoTime();
 
-        LocalDateTime min = dataTimeArray[0];
-        LocalDateTime max = dataTimeArray[0];
+        Short min = shortArray[0];
+        Short max = shortArray[0];
 
         Utils.printOperationDuration(startTime, "пошук мiнiмальної i максимальної дати i часу в масивi");
 
-        for (LocalDateTime dateTime : dataTimeArray) {
-            if (dateTime.isBefore(min)) {
-                min = dateTime;
+        for (Short short : shortArray) {
+            if (short.isBefore(min)) {
+                min = short;
             }
-            if (dateTime.isAfter(max)) {
-                max = dateTime;
+            if (short.isAfter(max)) {
+                max = short;
             }
         }
 
@@ -168,30 +167,30 @@ public class BasicDataOperationUsingSet {
     private void searchSet() {
         long startTime = System.nanoTime();
 
-        boolean isFound = this.dataTimeSet.contains(dataTimeValueToSearch);
+        boolean isFound = this.shortSet.contains(shortValueToSearch);
 
         Utils.printOperationDuration(startTime, "пошук в HashSet дати i часу");
 
         if (isFound) {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' знайдено в HashSet");
+            System.out.println("Значення '" + shortValueToSearch + "' знайдено в HashSet");
         } else {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' в HashSet не знайдено.");
+            System.out.println("Значення '" + shortValueToSearch + "' в HashSet не знайдено.");
         }
     }
 
     /**
-     * Знаходить мiнiмальне та максимальне значення в множинi LocalDateTime.
+     * Знаходить мiнiмальне та максимальне значення в множинi Short.
      */
     private void findMinAndMaxInSet() {
-        if (dataTimeSet == null || dataTimeSet.isEmpty()) {
+        if (shortSet == null || shortSet.isEmpty()) {
             System.out.println("HashSet порожнiй або не iнiцiалiзований.");
             return;
         }
 
         long startTime = System.nanoTime();
 
-        LocalDateTime min = Collections.min(dataTimeSet);
-        LocalDateTime max = Collections.max(dataTimeSet);
+        Short min = Collections.min(shortSet);
+        Short max = Collections.max(shortSet);
 
         Utils.printOperationDuration(startTime, "пошук мiнiмальної i максимальної дати i часу в HashSet");
 
@@ -203,12 +202,12 @@ public class BasicDataOperationUsingSet {
      * Порiвнює елементи масиву та множини.
      */
     private void compareArrayAndSet() {
-        System.out.println("Кiлькiсть елементiв в масивi: " + dataTimeArray.length);
-        System.out.println("Кiлькiсть елементiв в HashSet: " + dataTimeSet.size());
+        System.out.println("Кiлькiсть елементiв в масивi: " + shortArray.length);
+        System.out.println("Кiлькiсть елементiв в HashSet: " + shortSet.size());
 
         boolean allElementsMatch = true;
-        for (LocalDateTime dateTime : dataTimeArray) {
-            if (!dataTimeSet.contains(dateTime)) {
+        for (Short short : shortArray) {
+            if (!shortSet.contains(short)) {
                 allElementsMatch = false;
                 break;
             }
@@ -223,7 +222,7 @@ public class BasicDataOperationUsingSet {
 }
 
 /**
- * Клас Utils мiститить допомiжнi методи для роботи з даними типу LocalDateTime.
+ * Клас Utils мiститить допомiжнi методи для роботи з даними типу Short.
  */
 class Utils {
     /**
@@ -239,42 +238,41 @@ class Utils {
     }
 
     /**
-     * Зчитує масив об'єктiв LocalDateTime з файлу.
+     * Зчитує масив об'єктiв Short з файлу.
      * 
      * @param pathToFile Шлях до файлу з даними.
-     * @return Масив об'єктiв LocalDateTime.
+     * @return Масив об'єктiв Short.
      */
-    static LocalDateTime[] readArrayFromFile(String pathToFile) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime[] tempArray = new LocalDateTime[1000];
+    static Short[] readArrayFromFile(String pathToFile) {
+        Short[] tempArray = new Short[1000];
         int index = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                LocalDateTime dateTime = LocalDateTime.parse(line, formatter);
-                tempArray[index++] = dateTime;
+                Short number = Short.parseShort(line);
+                tempArray[index++] = number;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        LocalDateTime[] finalArray = new LocalDateTime[index];
+        Short[] finalArray = new Short[index];
         System.arraycopy(tempArray, 0, finalArray, 0, index);
 
         return finalArray;
     }
 
     /**
-     * Записує масив об'єктiв LocalDateTime у файл.
+     * Записує масив об'єктiв Short у файл.
      * 
-     * @param dataTimeArray Масив об'єктiв LocalDateTime.
+     * @param shortArray Масив об'єктiв Short.
      * @param pathToFile Шлях до файлу для запису.
      */
-    static void writeArrayToFile(LocalDateTime[] dataTimeArray, String pathToFile) {
+    static void writeArrayToFile(Short[] shortArray, String pathToFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile))) {
-            for (LocalDateTime dateTime : dataTimeArray) {
-                writer.write(dateTime.toString());
+            for (Short short : shortArray) {
+                writer.write(short.toString());
                 writer.newLine();
             }
         } catch (IOException e) {

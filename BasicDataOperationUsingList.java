@@ -3,7 +3,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -72,7 +72,7 @@ public class BasicDataOperationUsingList {
         }
 
         String searchValue = args[0];
-        dataTimeValueToSearch = Short.parse(searchValue, ShortFormatter.ISO_DATE_TIME);
+        dataTimeValueToSearch = Short.parseShort(searchValue);
 
         dataTimeArray = Utils.readArrayFromFile(PATH_TO_DATA_FILE);
         dataTimeList = new ArrayList<>(Arrays.asList(dataTimeArray));
@@ -152,10 +152,10 @@ public class BasicDataOperationUsingList {
         Utils.printOperationDuration(startTime, "пошук мiнiмальної i максимальної дати i часу в масивi");
 
         for (Short Short : dataTimeArray) {
-            if (Short.isBefore(min)) {
+            if (java.lang.Short.MAX_VALUE < min) {
                 min = Short;
             }
-            if (Short.isAfter(max)) {
+            if (java.lang.Short.MAX_VALUE > max) {
                 max = Short;
             }
         }
@@ -237,14 +237,13 @@ class Utils {
      * @return Масив об'єктiв Short.
      */
     static Short[] readArrayFromFile(String pathToFile) {
-        ShortFormatter formatter = ShortFormatter.ISO_DATE_TIME;
         Short[] tempArray = new Short[1000];
         int index = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Short Short = Short.parse(line, formatter);
+                Short Short = java.lang.Short.parseShort(line);
                 tempArray[index++] = Short;
             }
         } catch (IOException e) {

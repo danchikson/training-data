@@ -1,275 +1,173 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Клас BasicDataOperationUsingList надає методи для виконання основних операцiй з даними типу Short.
- * 
- * <p>Цей клас зчитує данi з файлу "list/Short.data", сортує їх та виконує пошук значення в масивi та списку.</p>
- * 
- * <p>Основнi методи:</p>
- * <ul>
- *   <li>{@link #main(String[])} - Точка входу в програму.</li>
- *   <li>{@link #doDataOperation()} - Виконує основнi операцiї з даними.</li>
- *   <li>{@link #sortArray()} - Сортує масив Short.</li>
- *   <li>{@link #searchArray()} - Виконує пошук значення в масивi Short.</li>
- *   <li>{@link #findMinAndMaxInArray()} - Знаходить мiнiмальне та максимальне значення в масивi Short.</li>
- *   <li>{@link #sortList()} - Сортує список Short.</li>
- *   <li>{@link #searchList()} - Виконує пошук значення в списку Short.</li>
- *   <li>{@link #findMinAndMaxInList()} - Знаходить мiнiмальне та максимальне значення в списку Short.</li>
- * </ul>
- * 
- * <p>Конструктор:</p>
- * <ul>
- *   <li>{@link #BasicDataOperationUsingList(String[])} - iнiцiалiзує об'єкт з значенням для пошуку.</li>
- * </ul>
- * 
- * <p>Константи:</p>
- * <ul>
- *   <li>{@link #PATH_TO_DATA_FILE} - Шлях до файлу з даними.</li>
- * </ul>
- * 
- * <p>Змiннi екземпляра:</p>
- * <ul>
- *   <li>{@link #dataTimeValueToSearch} - Значення Short для пошуку.</li>
- *   <li>{@link #dataTimeArray} - Масив Short.</li>
- *   <li>{@link #dataTimeList} - Список Short.</li>
- * </ul>
- * 
- * <p>Приклад використання:</p>
- * <pre>
- * {@code
- * java BasicDataOperationUsingList "2024-03-16T00:12:38Z"
- * }
- * </pre>
+ * Клас BasicDataOperationUsingList надає методи для виконання основних операцій з даними типу short.
  */
 public class BasicDataOperationUsingList {
-    static final String PATH_TO_DATA_FILE = "list/Short.data";
+    static final String PATH_TO_DATA_FILE = "list/short.data";
 
-    Short dataTimeValueToSearch;
-    Short[] dataTimeArray;
-    List<Short> dataTimeList;
+    short valueToSearch;
+    short[] shortArray;
+    List<Short> shortList;
 
-    public static void main(String[] args) {  
-        BasicDataOperationUsingList basicDataOperationUsingList = new BasicDataOperationUsingList(args);
-        basicDataOperationUsingList.doDataOperation();
-    }
-
-    /**
-     * Конструктор, який iнiцiалiзує об'єкт з значенням для пошуку.
-     * 
-     * @param args Аргументи командного рядка, де перший аргумент - значення для пошуку.
-     */
-    BasicDataOperationUsingList(String[] args) {
+    public static void main(String[] args) {
         if (args.length == 0) {
-            throw new RuntimeException("Вiдсутнє значення для пошуку");
+            throw new RuntimeException("Введіть значення для пошуку у вигляді аргументу командного рядка.");
         }
 
-        String searchValue = args[0];
-        dataTimeValueToSearch = Short.parseShort(searchValue);
-
-        dataTimeArray = Utils.readArrayFromFile(PATH_TO_DATA_FILE);
-        dataTimeList = new ArrayList<>(Arrays.asList(dataTimeArray));
+        BasicDataOperationUsingList operation = new BasicDataOperationUsingList(Short.parseShort(args[0]));
+        operation.performOperations();
     }
 
-    /**
-     * Виконує основнi операцiї з даними.
-     * 
-     * Метод зчитує масив та список об'єктiв Short з файлу, сортує їх та виконує пошук значення.
-     */
-    void doDataOperation() {
-        // операцiї з масивом дати та часу
-        searchArray();
-        findMinAndMaxInArray();
+    public BasicDataOperationUsingList(short valueToSearch) {
+        this.valueToSearch = valueToSearch;
+        this.shortArray = Utils.readArrayFromFile(PATH_TO_DATA_FILE);
+        this.shortList = new ArrayList<>();
+        for (short value : shortArray) {
+            shortList.add(value);
+        }
+    }
 
+    public void performOperations() {
+        System.out.println("Операції з масивом:");
+        searchInArray();
+        findMinAndMaxInArray();
         sortArray();
-        
-        searchArray();
+        searchInArray();
         findMinAndMaxInArray();
 
-        // операцiї з ArrayList
-        searchList();
+        System.out.println("\nОперації з списком:");
+        searchInList();
         findMinAndMaxInList();
-
         sortList();
-
-        searchList();
+        searchInList();
         findMinAndMaxInList();
 
-        // записати вiдсортований масив в окремий файл
-        Utils.writeArrayToFile(dataTimeArray, PATH_TO_DATA_FILE + ".sorted");
+        Utils.writeArrayToFile(shortArray, PATH_TO_DATA_FILE + ".sorted");
     }
 
-    /**
-     * Сортує масив об'єктiв Short та виводить початковий i вiдсортований масиви.
-     * Вимiрює та виводить час, витрачений на сортування масиву в наносекундах.
-     */
-    void sortArray() {
-        long startTime = System.nanoTime();
-
-        Arrays.sort(dataTimeArray);
-
-        Utils.printOperationDuration(startTime, "сортування масиву дати i часу");
-    }
-
-    /**
-     * Метод для пошуку значення в масивi дати i часу.
-     */
-    void searchArray() {
-        long startTime = System.nanoTime();
-
-        int index = Arrays.binarySearch(this.dataTimeArray, dataTimeValueToSearch);
-
-        Utils.printOperationDuration(startTime, "пошук в масивi дати i часу");
-
+    private void searchInArray() {
+        System.out.println("Пошук у масиві...");
+        int index = Utils.binarySearch(shortArray, valueToSearch);
         if (index >= 0) {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' знайдено в масивi за iндексом: " + index);
+            System.out.println("Значення '" + valueToSearch + "' знайдено в масиві за індексом: " + index);
         } else {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' в масивi не знайдено.");
+            System.out.println("Значення '" + valueToSearch + "' у масиві не знайдено.");
         }
     }
 
-    /**
-     * Знаходить мiнiмальне та максимальне значення в масивi дати i часу.
-     */
-    void findMinAndMaxInArray() {
-        if (dataTimeArray == null || dataTimeArray.length == 0) {
-            System.out.println("Масив порожнiй або не iнiцiалiзований.");
+    private void findMinAndMaxInArray() {
+        if (shortArray.length == 0) {
+            System.out.println("Масив порожній.");
             return;
         }
 
-        long startTime = System.nanoTime();
-
-        Short min = dataTimeArray[0];
-        Short max = dataTimeArray[0];
-
-        Utils.printOperationDuration(startTime, "пошук мiнiмальної i максимальної дати i часу в масивi");
-
-        for (Short Short : dataTimeArray) {
-            if (java.lang.Short.MAX_VALUE < min) {
-                min = Short;
-            }
-            if (java.lang.Short.MAX_VALUE > max) {
-                max = Short;
-            }
+        short min = shortArray[0];
+        short max = shortArray[0];
+        for (short value : shortArray) {
+            if (value < min) min = value;
+            if (value > max) max = value;
         }
 
-        System.out.println("Мiнiмальне значення в масивi: " + min);
-        System.out.println("Максимальне значення в масивi: " + max);
+        System.out.println("Мінімальне значення в масиві: " + min);
+        System.out.println("Максимальне значення в масиві: " + max);
     }
 
-    /**
-     * Шукає задане значення дати i часу в ArrayList дати i часу.
-     */
-    void searchList() {
-        long startTime = System.nanoTime();
+    private void sortArray() {
+        System.out.println("Сортування масиву...");
+        Utils.sort(shortArray);
+    }
 
-        int index = Collections.binarySearch(this.dataTimeList, dataTimeValueToSearch);
-
-        Utils.printOperationDuration(startTime, "пошук в ArrayList дати i часу");        
-
+    private void searchInList() {
+        System.out.println("Пошук у списку...");
+        int index = Collections.binarySearch(shortList, valueToSearch);
         if (index >= 0) {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' знайдено в ArrayList за iндексом: " + index);
+            System.out.println("Значення '" + valueToSearch + "' знайдено в списку за індексом: " + index);
         } else {
-            System.out.println("Значення '" + dataTimeValueToSearch + "' в ArrayList не знайдено.");
+            System.out.println("Значення '" + valueToSearch + "' у списку не знайдено.");
         }
     }
 
-    /**
-     * Знаходить мiнiмальне та максимальне значення в ArrayList дати i часу.
-     */
-    void findMinAndMaxInList() {
-        if (dataTimeList == null || dataTimeList.isEmpty()) {
-            System.out.println("ArrayList порожнiй або не iнiцiалiзований.");
+    private void findMinAndMaxInList() {
+        if (shortList.isEmpty()) {
+            System.out.println("Список порожній.");
             return;
         }
 
-        long startTime = System.nanoTime();
+        short min = Collections.min(shortList);
+        short max = Collections.max(shortList);
 
-        Short min = Collections.min(dataTimeList);
-        Short max = Collections.max(dataTimeList);
-
-        Utils.printOperationDuration(startTime, "пошук мiнiмальної i максимальної дати i часу в ArrayList");
-
-        System.out.println("Мiнiмальне значення в ArrayList: " + min);
-        System.out.println("Максимальне значення в ArrayList: " + max);
+        System.out.println("Мінімальне значення у списку: " + min);
+        System.out.println("Максимальне значення у списку: " + max);
     }
 
-    /**
-     * Сортує ArrayList об'єктiв Short та виводить початковий i вiдсортований списки.
-     * Вимiрює та виводить час, витрачений на сортування списку в наносекундах.
-     */
-    void sortList() {
-        long startTime = System.nanoTime();
-
-        Collections.sort(dataTimeList);
-
-        Utils.printOperationDuration(startTime, "сортування ArrayList дати i часу");
+    private void sortList() {
+        System.out.println("Сортування списку...");
+        Collections.sort(shortList);
     }
 }
 
 /**
- * Клас Utils мiститить допомiжнi методи для роботи з даними типу Short.
+ * Клас Utils містить допоміжні методи для роботи з масивами і файлами.
  */
 class Utils {
-    /**
-     * Виводить час виконання операцiї в наносекундах.
-     * 
-     * @param startTime Час початку операцiї в наносекундах.
-     * @param operationName Назва операцiї.
-     */
-    static void printOperationDuration(long startTime, String operationName) {
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        System.out.println("\n>>>>>>>>> Час виконання операцiї '" + operationName + "': " + duration + " наносекунд");
-    }
-
-    /**
-     * Зчитує масив об'єктiв Short з файлу.
-     * 
-     * @param pathToFile Шлях до файлу з даними.
-     * @return Масив об'єктiв Short.
-     */
-    static Short[] readArrayFromFile(String pathToFile) {
-        Short[] tempArray = new Short[1000];
-        int index = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
+    public static short[] readArrayFromFile(String pathToFile) {
+        List<Short> values = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                Short Short = java.lang.Short.parseShort(line);
-                tempArray[index++] = Short;
+            while ((line = reader.readLine()) != null) {
+                values.add(Short.parseShort(line));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Помилка читання файлу: " + e.getMessage(), e);
         }
 
-        Short[] finalArray = new Short[index];
-        System.arraycopy(tempArray, 0, finalArray, 0, index);
-
-        return finalArray;
+        short[] result = new short[values.size()];
+        for (int i = 0; i < values.size(); i++) {
+            result[i] = values.get(i);
+        }
+        return result;
     }
 
-    /**
-     * Записує масив об'єктiв Short у файл.
-     * 
-     * @param dataTimeArray Масив об'єктiв Short.
-     * @param pathToFile Шлях до файлу для запису.
-     */
-    static void writeArrayToFile(Short[] dataTimeArray, String pathToFile) {
+    public static void writeArrayToFile(short[] array, String pathToFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathToFile))) {
-            for (Short Short : dataTimeArray) {
-                writer.write(Short.toString());
+            for (short value : array) {
+                writer.write(String.valueOf(value));
                 writer.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Помилка запису у файл: " + e.getMessage(), e);
         }
+    }
+
+    public static void sort(short[] array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    short temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    public static int binarySearch(short[] array, short value) {
+        int left = 0;
+        int right = array.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (array[mid] == value) {
+                return mid;
+            } else if (array[mid] < value) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
     }
 }

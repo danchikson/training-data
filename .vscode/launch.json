@@ -1,15 +1,20 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "java",
-            "name": "BasicDataOperation",
+            "name": "Запуск BasicDataOperationUsingList з аргументами",
             "request": "launch",
-            "mainClass": "${file}",
+            "mainClass": "BasicDataOperationUsingList",
+            "projectName": "training-data_24fe1a1b",
             "args": "-6374"
+        },
+        {
+            "type": "java",
+            "name": "Запуск BasicDataOperation без аргументів",
+            "request": "launch",
+            "mainClass": "BasicDataOperation",
+            "projectName": "training-data_24fe1a1b"
         }
     ]
 }

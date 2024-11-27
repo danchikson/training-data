@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Клас BasicDataOperationUsingList надає методи для виконання основних операцій з даними типу short.
@@ -32,25 +34,54 @@ public class BasicDataOperationUsingList {
     }
 
     public void performOperations() {
+        // Вивести поточну дату і час перед кожною операцією
+        printCurrentDateTime(); 
+
         System.out.println("Операції з масивом:");
-        searchInArray();
-        findMinAndMaxInArray();
-        sortArray();
-        searchInArray();
-        findMinAndMaxInArray();
+
+        measureTime("пошук у масиві", this::searchInArray);
+        printCurrentDateTime();  // Печать текущего времени перед следующей операцией
+
+        measureTime("пошук мінімального і максимального значення у масиві", this::findMinAndMaxInArray);
+        printCurrentDateTime(); 
+
+        measureTime("сортування масиву", this::sortArray);
+        printCurrentDateTime(); 
+
+        measureTime("пошук у масиві після сортування", this::searchInArray);
+        printCurrentDateTime(); 
+
+        measureTime("пошук мінімального і максимального значення у масиві після сортування", this::findMinAndMaxInArray);
+        printCurrentDateTime(); 
 
         System.out.println("\nОперації з списком:");
-        searchInList();
-        findMinAndMaxInList();
-        sortList();
-        searchInList();
-        findMinAndMaxInList();
+
+        measureTime("пошук у списку", this::searchInList);
+        printCurrentDateTime(); 
+
+        measureTime("пошук мінімального і максимального значення у списку", this::findMinAndMaxInList);
+        printCurrentDateTime(); 
+
+        measureTime("сортування списку", this::sortList);
+        printCurrentDateTime(); 
+
+        measureTime("пошук у списку після сортування", this::searchInList);
+        printCurrentDateTime(); 
+
+        measureTime("пошук мінімального і максимального значення у списку після сортування", this::findMinAndMaxInList);
+        printCurrentDateTime(); 
 
         Utils.writeArrayToFile(shortArray, PATH_TO_DATA_FILE + ".sorted");
     }
 
+    private void measureTime(String operationName, Runnable operation) {
+        long startTime = System.nanoTime();
+        operation.run();
+        long endTime = System.nanoTime();
+        Utils.printOperationDuration(startTime, operationName, endTime);
+    }
+
     private void searchInArray() {
-        System.out.println("Пошук у масиві...");
         int index = Utils.binarySearch(shortArray, valueToSearch);
         if (index >= 0) {
             System.out.println("Значення '" + valueToSearch + "' знайдено в масиві за індексом: " + index);
@@ -77,12 +108,14 @@ public class BasicDataOperationUsingList {
     }
 
     private void sortArray() {
-        System.out.println("Сортування масиву...");
-        Utils.sort(shortArray);
+        // вимiрюємо час, витрачений на сортування масиву
+        long startTime = System.nanoTime();
+        Arrays.sort(shortArray);
+        long endTime = System.nanoTime();
+        Utils.printOperationDuration(startTime, "сортування масиву", endTime);
     }
 
     private void searchInList() {
-        System.out.println("Пошук у списку...");
         int index = Collections.binarySearch(shortList, valueToSearch);
         if (index >= 0) {
             System.out.println("Значення '" + valueToSearch + "' знайдено в списку за індексом: " + index);
@@ -105,8 +138,15 @@ public class BasicDataOperationUsingList {
     }
 
     private void sortList() {
-        System.out.println("Сортування списку...");
         Collections.sort(shortList);
+    }
+
+    /**
+     * Метод для друку поточної дати і часу.
+     */
+    private void printCurrentDateTime() {
+        String currentDateTime = Utils.getCurrentDateTime();
+        System.out.println("Поточна дата і час: " + currentDateTime);
     }
 }
 
@@ -169,5 +209,21 @@ class Utils {
             }
         }
         return -1;
+    }
+
+    /**
+     * Метод для отримання поточної дати і часу.
+     */
+    public static String getCurrentDateTime() {
+        Date now = new Date();
+        return now.toString();
+    }
+
+    /**
+     * Метод для виведення часу операції.
+     */
+    public static void printOperationDuration(long startTime, String operationName, long endTime) {
+        long duration = endTime - startTime;
+        System.out.printf(">>>>>>>>> Час виконання операції '%s': %d наносекунд%n", operationName, duration);
     }
 }

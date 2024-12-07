@@ -3,17 +3,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Запуск BasicDataOperationUsingList з аргументами",
+            "name": "Запуск BasicDataOperationUsingList с аргументами",
             "request": "launch",
-            "mainClass": "BasicDataOperationUsingList",
+            "mainClass": "BasicDataOperationUsingList", // Убедитесь, что это имя класса
             "projectName": "training-data_24fe1a1b",
-            "args": "-6374"
+            "args": "10" // Замена на числовое значение для корректной работы программы
         },
         {
             "type": "java",
-            "name": "Запуск BasicDataOperation без аргументів",
+            "name": "Запуск BasicDataOperation без аргументов",
             "request": "launch",
-            "mainClass": "BasicDataOperation",
+            "mainClass": "BasicDataOperation", // Проверьте существование такого класса
             "projectName": "training-data_24fe1a1b"
         }
     ]

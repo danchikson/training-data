@@ -51,7 +51,7 @@ public class BasicDataOperationUsingList {
     }
 
     private void searchInArray() {
-        int index = binarySearch(shortArray, valueToSearch);
+        int index = reverseBinarySearch(shortArray, valueToSearch);
         if (index >= 0) {
             System.out.println("Значение найдено по индексу: " + index);
         } else {
@@ -84,7 +84,7 @@ public class BasicDataOperationUsingList {
     }
 
     private void searchInList() {
-        int index = Collections.binarySearch(shortList, valueToSearch);
+        int index = reverseBinarySearchInList(shortList, valueToSearch);
         if (index >= 0) {
             System.out.println("Значение найдено в списке по индексу: " + index);
         } else {
@@ -105,6 +105,38 @@ public class BasicDataOperationUsingList {
 
     private void sortListInReverse() {
         Collections.sort(shortList, Collections.reverseOrder());
+    }
+
+    private int reverseBinarySearch(short[] array, short value) {
+        int left = 0;
+        int right = array.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (array[mid] == value) {
+                return mid;
+            } else if (array[mid] > value) { // Зміна знаку порівняння
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+    private int reverseBinarySearchInList(List<Short> list, short value) {
+        int left = 0;
+        int right = list.size() - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (list.get(mid) == value) {
+                return mid;
+            } else if (list.get(mid) > value) { // Зміна знаку порівняння
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
     }
 
     public static short[] readArrayFromFile(String pathToFile) {
@@ -144,21 +176,5 @@ public class BasicDataOperationUsingList {
         } catch (IOException e) {
             throw new RuntimeException("Ошибка записи в файл: " + e.getMessage(), e);
         }
-    }
-
-    public static int binarySearch(short[] array, short value) {
-        int left = 0;
-        int right = array.length - 1;
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (array[mid] == value) {
-                return mid;
-            } else if (array[mid] < value) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-        return -1;
     }
 }
